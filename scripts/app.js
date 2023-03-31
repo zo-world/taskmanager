@@ -62,9 +62,9 @@ function displayTask(task){
     </div>
     <label>${task.status}</label>
     <label>$${task.budget || "0.00"}</label>
+    <label>Days to complete:  ${task.duration}</label>
     <div class="dates">
       <label>${formatDate(task.dueDate)}</label>
-      <label>Days to complete: ${task.duration}</label>
     </div>
   </div>`;
 
