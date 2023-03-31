@@ -27,17 +27,35 @@ function saveTask(){
     contentType: 'application/json',
     success: function(res){
       console.log("Saved worked", res);
+      showAlert("Awesome! Get to work!");
       displayTask(task);
       clearForm();
     },
     error: function(error) {
       console.log("Save failed", error);
-      alert("Unexpected Error, task was not saved :( ");
+      showAlert("Unexpected Error, task was not saved :(   ");
     }
   });
-
   console.log(task);
 }
+
+function showAlert(message) {
+  const alertDiv = document.getElementById('custom-alert');
+  const alertText = document.getElementById('alert-text');
+
+  alertText.innerHTML = message;
+  alertDiv.style.display = 'block';
+
+  const closeButton = document.getElementById('alert-close');
+  closeButton.onclick = function() {
+    alertDiv.style.display = 'none';
+  };
+
+  setTimeout(function() {
+    alertDiv.style.display = 'none';
+  }, 3000);
+}
+
 
 function clearForm(){
   $("#txtTitle").val('');
@@ -50,7 +68,7 @@ function clearForm(){
 }
 
 function formatDate(date) {
-  let trueDate =  new Date(date); //parse date string intodddddobj
+  let trueDate =  new Date(date); //parse date string into obj
   return trueDate.toLocaleDateString() + ' ' + trueDate.toLocaleTimeString();
 }
 
@@ -112,8 +130,6 @@ function init(){
 
   //retrieve data
   fetchTasks();
-
-
   //hook events
   $("#btnShowPanel").click(togglePanel);
   $("#btnSave").click(saveTask)
@@ -133,4 +149,4 @@ window.onload = init;
  * - format date
  * - clear form after displaying
  * 
- */
+*/

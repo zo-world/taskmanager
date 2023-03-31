@@ -8,7 +8,6 @@ class Task{
     this.status = status;
     this.color = color;
     this.budget = budget;
-
     this.name = "Yreish";
   }
 }
@@ -19,4 +18,4 @@ class Task{
 - update task class to receive that new value
 - send the new value when creating a new task (on saveTask fn)
 - update the display function to display the budget (css changes may be needed)
- */
+*/

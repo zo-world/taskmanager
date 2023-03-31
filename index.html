@@ -52,12 +52,12 @@
             <option>Pending</option>
             <option>Active</option>
             <option>Completed</option>
-            <option>Cancelled</option>
+            <option>Canceled</option>
           </select>
         </div>
         <div class="mb-3">
           <label class="form-label">Budget</label>
-          <input id="txtBudget" type="number" placeholder="Enter your budget: Don't include any special characters $,%#" class="form-control">
+          <input id="txtBudget" type="number" placeholder="Enter your budget: Don't include any special characters ($,%#)" class="form-control">
         </div>
         <div class="mb-3">
           <label class="form-label">Color</label>
@@ -67,6 +67,14 @@
           <button id="btnSave" class="btn btn-dark">Save Task</button>
         </div>
 
+        <footer>
+          <div id="custom-alert">
+            <div class="alert-message">
+              <span id="alert-text"></span>
+            </div>
+            <button id="alert-close">X</button>
+          </div>          
+        </footer>
       </div>
     </section>
   </main>
@@ -79,8 +87,8 @@
 </html>
 
 <!-- HW!!
-  JS true and truethy values -->
-
+  JS true and truethy values 
+-->
 
 <!-- 
   Task:

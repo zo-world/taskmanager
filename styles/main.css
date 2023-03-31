@@ -65,7 +65,6 @@ main{
   background-color: rgba(255, 255, 255, 0.782);
   align-items: center;
 }
-
 .task .info{
   flex: 5;
 }
@@ -80,4 +79,33 @@ main{
 }
 .task .dates{
   flex: 0;
+}
+#custom-alert {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  z-index: 1000;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.alert-message {
+  padding: 10px;
+  font-size: 16px;
+  text-align: center;
+}
+
+#alert-close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
 }
