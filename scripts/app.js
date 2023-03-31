@@ -1,4 +1,5 @@
 var isImportant = false;
+const serverUrl = 'http://fsdiapi.azurewebsites.net'
 
 function togglePanel(){
   $("#form").slideToggle("slow");
@@ -13,11 +14,44 @@ function saveTask(){
   const duration = $("#txtDuration").val();
   const status = $("#selStatus").val();
   const color = $("#selColor").val();
+  const budget = $("#txtBudget").val();
 
-  let task = new Task(title, isImportant, desc, dueDate, duration, status, color);
+  let task = new Task(title, isImportant, desc, dueDate, duration, status, color, budget);
   console.log(task);
   
-  displayTask(task);
+  // send the obj to server
+  $.ajax({
+    type: "POST",
+    url: serverUrl + '/api/tasks/',
+    data: JSON.stringify(task),
+    contentType: 'application/json',
+    success: function(res){
+      console.log("Saved worked", res);
+      displayTask(task);
+      clearForm();
+    },
+    error: function(error) {
+      console.log("Save failed", error);
+      alert("Unexpected Error, task was not saved :( ");
+    }
+  });
+
+  console.log(task);
+}
+
+function clearForm(){
+  $("#txtTitle").val('');
+  $("#txtDescription").val('');
+  $("#selDueDate").val('');
+  $("#txtDuration").val('');
+  $("#selStatus").val('');
+  $("#selColor").val('#000000');
+  $("#txtBudget").val('');
+}
+
+function formatDate(date) {
+  let trueDate =  new Date(date); //parse date string intodddddobj
+  return trueDate.toLocaleDateString() + ' ' + trueDate.toLocaleTimeString();
 }
 
 function displayTask(task){
@@ -27,9 +61,10 @@ function displayTask(task){
       <p>${task.description}</p>
     </div>
     <label>${task.status}</label>
+    <label>$${task.budget || "0.00"}</label>
     <div class="dates">
-      <label>${task.dueDate}</label>
-      <label>${task.duration}</label>
+      <label>${formatDate(task.dueDate)}</label>
+      <label>Days to complete: ${task.duration}</label>
     </div>
   </div>`;
 
@@ -50,10 +85,34 @@ function toggleImportant(){
   }
 }
 
+function fetchTasks() {
+  // retrieve all the tasks from the server
+  $.ajax({
+    url: serverUrl + '/api/tasks/',
+    type: 'GET',
+    success: function(response){
+      const list = JSON.parse(response); //parse a json string into array/objects
+      for(let i=0; i<list.length; i++){
+        let record = list[i];
+        //if the task name is equal to my name, then:
+        if (record.name === "Yreish"){
+          displayTask(record);      
+        }
+      }
+    },
+    error: function(error){
+      console.log("Error", error);
+    }
+  });
+
+}
+
 function init(){
   console.log("Task Manager");
 
   //retrieve data
+  fetchTasks();
+
 
   //hook events
   $("#btnShowPanel").click(togglePanel);
