@@ -16,6 +16,16 @@ function saveTask(){
   const color = $("#selColor").val();
   const budget = $("#txtBudget").val();
 
+  //validations
+  // if no title OR no desc OR no duration OR no busget
+  if (!title || !desc || !duration || !budget) {
+    //show an error
+    showAlert("Validations have not been met! Please try again :( ", true);
+    //stop the execution / Don't do anything else in this fn
+    return;
+  }
+
+
   let task = new Task(title, isImportant, desc, dueDate, duration, status, color, budget);
   console.log(task);
   
@@ -27,24 +37,31 @@ function saveTask(){
     contentType: 'application/json',
     success: function(res){
       console.log("Saved worked", res);
-      showAlert("Awesome! Get to work!");
+      showAlert("Awesome! Get to work!", false);
       displayTask(task);
       clearForm();
     },
     error: function(error) {
       console.log("Save failed", error);
-      showAlert("Unexpected Error, task was not saved :(   ");
+      showAlert("Unexpected Error, task was not saved :(   ", true);
     }
   });
   console.log(task);
 }
 
-function showAlert(message) {
+function showAlert(message, isError) {
   const alertDiv = document.getElementById('custom-alert');
   const alertText = document.getElementById('alert-text');
 
   alertText.innerHTML = message;
   alertDiv.style.display = 'block';
+
+  if(isError) {
+    $("#custom-alert").addClass("error-alert");
+  }
+  else {
+    $("#custom-alert").removeClass("error-alert");
+  }
 
   const closeButton = document.getElementById('alert-close');
   closeButton.onclick = function() {
@@ -72,21 +89,58 @@ function formatDate(date) {
   return trueDate.toLocaleDateString() + ' ' + trueDate.toLocaleTimeString();
 }
 
+function getIcon(savedAsImportant) {
+  if(savedAsImportant){
+    //HERE
+    return `<i class="fa-solid fa-star iImportant"></i>`;
+  }else{
+    return `<i class="fa-regular fa-star iNotImportant"></i>`;
+  }
+}
+
+function formatBudget(budget){
+  if(!budget) {
+    return "0.00";
+  }
+
+  //parse budget to a number, and then fix it to 2 decimals
+  return parseFloat(budget).toFixed(2);
+}
+
 function displayTask(task){
-  let syntax = `<div class="task" style="border:1px solid ${task.color};">
+  let syntax = `<div id="${task._id}" class="task" style="border:1px solid ${task.color};">
+
+  ${getIcon(task.important)}
+
+
     <div class="info">
       <h5>${task.title}</h5>
       <p>${task.description}</p>
     </div>
     <label>${task.status}</label>
-    <label>$${task.budget || "0.00"}</label>
+    <label>$${formatBudget(task.budget)}</label>
     <label>Days to complete:  ${task.duration}</label>
     <div class="dates">
       <label>${formatDate(task.dueDate)}</label>
     </div>
+      <i onclick="deleteTask('${task._id}')" class="fa-solid fa-trash iDelete"></i>
   </div>`;
 
   $("#pendingTasks").append(syntax);
+}
+
+function deleteTask(id){
+  $.ajax({
+    type: "DELETE",
+    url: serverUrl + `/api/tasks/${id}/`,
+    success: function(){
+      console.log("Task removed");
+      $("#" + id).remove(); //remove div from the screen
+    },
+    error: function(){
+      console.log("Error deleting:", error);
+    }
+  });
 }
 
 function toggleImportant(){
@@ -125,6 +179,20 @@ function fetchTasks() {
 
 }
 
+function deleteAllTasks() {
+  $.ajax({
+    type: "DELETE",
+    url: serverUrl + "/api/tasks/clear/Yreish/",
+    success: function(){
+      console.log("task cleared");
+      $("#pendingTasks").html(''); //clear the contents of list (removing all tasks)
+    },
+    error: function(error) {
+      console.log("Error clearing tasks", error);
+    }
+  });
+}
+
 function init(){
   console.log("Task Manager");
 
@@ -134,19 +202,7 @@ function init(){
   $("#btnShowPanel").click(togglePanel);
   $("#btnSave").click(saveTask)
   $("#iImportant").click(toggleImportant);
+  $("#btnDeleteAll").click(deleteAllTasks);
 }
 
 window.onload = init;
-
-/**
- * Inv home:
- * http methods/verbs
- * http status codes
- * 
- * 
- * 
- * Challenges:
- * - format date
- * - clear form after displaying
- * 
-*/

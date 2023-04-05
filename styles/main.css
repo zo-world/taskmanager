@@ -21,7 +21,7 @@ main{
   flex: 7;
   position: relative;
 }
-#btnShowPanel{
+.btn-container{
   position: absolute;
   top: 5px;
   right: 10px;
@@ -93,13 +93,11 @@ main{
   z-index: 1000;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
-
 .alert-message {
   padding: 10px;
   font-size: 16px;
   text-align: center;
 }
-
 #alert-close {
   position: absolute;
   top: 5px;
@@ -108,4 +106,21 @@ main{
   border: none;
   font-size: 16px;
   cursor: pointer;
+}
+.iImportant{
+  font-size: 28px;
+  color: #333;
+
+}
+.iNotImportant{
+  font-size: 28px;
+  color: #333;
+}
+.iDelete {
+  font-size: 28px;
+  cursor: pointer;
+  color: #333;
+}
+.iDelete:hover{
+  color: crimson;
 }

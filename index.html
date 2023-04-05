@@ -15,8 +15,11 @@
   <main>
     <section id="list">
       <h3>Your tasks</h3>
-      <button class="btn btn-secondary" id="btnShowPanel">Show/Hide sidebar</button>
-
+      <div class="btn-container">
+        <button class="btn btn-outline-danger btn-clear" id="btnDeleteAll">Clear All Tasks</button>
+        <button class="btn btn-secondary" id="btnShowPanel">Show/Hide sidebar</button>
+      </div>
+        
       <div id="pendingTasks">
         <!-- tasks will be rendered here -->
       </div>
@@ -85,18 +88,3 @@
   <script src="scripts/app.js"></script>
 </body>
 </html>
-
-<!-- HW!!
-  JS true and truethy values 
--->
-
-<!-- 
-  Task:
-  important
-  title
-  description
-  dueDate
-  duration (days)
-  status (dropdown)
-  color
--->
